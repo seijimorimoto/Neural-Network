@@ -2,16 +2,9 @@
 
 
 
-NeuronLayer::NeuronLayer(int n, NeuronLayer *previousLayer, double lambda, vector<double> *inputs, int minWeight, int maxWeight)
+NeuronLayer::NeuronLayer(int n, double lambda, vector<double> *inputs, vector<double> *outputs, int minWeight, int maxWeight)
 {
-	if (previousLayer)
-	{
-		this->neurons = new vector<Neuron>(n, Neuron(previousLayer->size(), minWeight, maxWeight));
-	}
-	else
-	{
-		this->neurons = new vector<Neuron>(n, Neuron(0, minWeight, maxWeight));
-	}
+	this->neurons = new vector<Neuron>(n, Neuron(minWeight, maxWeight));
 
 	if (inputs)
 	{
@@ -20,8 +13,15 @@ NeuronLayer::NeuronLayer(int n, NeuronLayer *previousLayer, double lambda, vecto
 			(*this->neurons)[i].setInputValue((*inputs)[i]);
 		}
 	}
+
+	if (outputs)
+	{
+		for (unsigned int i = 0; i < outputs->size(); i++)
+		{
+			(*this->neurons)[i].expectedOutput = (*outputs)[i];
+		}
+	}
 	
-	this->previousLayer = previousLayer;
 	this->lambda = lambda;
 	this->minWeight = minWeight;
 	this->maxWeight = maxWeight;
@@ -37,11 +37,11 @@ int NeuronLayer::size()
 	return this->neurons->size();
 }
 
-void NeuronLayer::computeInputs()
+void NeuronLayer::computeInputs(vector<Neuron> *prevLayerNeurons)
 {
 	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
-		(*this->neurons)[i].computeInput(this->previousLayer->neurons);
+		(*this->neurons)[i].computeInput(prevLayerNeurons);
 	}
 }
 
@@ -50,6 +50,15 @@ void NeuronLayer::computeActivationValues()
 	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
 		(*this->neurons)[i].computeActivationValue(lambda);
+	}
+}
+
+void NeuronLayer::initializeWeights(unsigned int numberOfPrevLayerNeurons)
+{
+	for (unsigned int i = 0; i < numberOfPrevLayerNeurons; i++)
+	{
+		(*this->neurons)[i].setWeightsSize(numberOfPrevLayerNeurons);
+		(*this->neurons)[i].initializeWeights(numberOfPrevLayerNeurons, minWeight, maxWeight);
 	}
 }
 

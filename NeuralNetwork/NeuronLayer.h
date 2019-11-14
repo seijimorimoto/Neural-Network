@@ -7,15 +7,15 @@ using namespace std;
 class NeuronLayer
 {
 public:
-	NeuronLayer(int n, NeuronLayer *previousLayer, double lambda, vector<double> *inputs=nullptr, int minWeight=0, int maxWeight=1);
+	NeuronLayer(int n, double lambda, vector<double> *inputs=nullptr, vector<double> *outputs=nullptr, int minWeight=0, int maxWeight=1);
 	~NeuronLayer();
-	void computeInputs();
+	void computeInputs(vector<Neuron> *prevLayerNeurons);
 	void computeActivationValues();
+	void initializeWeights(unsigned int numberOfPrevLayerNeurons);
 	int size();
 	double lambda;
 	int minWeight;
 	int maxWeight;
-	NeuronLayer *previousLayer;
 	vector<Neuron> *neurons;
 };
 

@@ -3,17 +3,11 @@
 #include <ctime>
 #include "Neuron.h"
 
-Neuron::Neuron(int prevLayerSize, int minWeight, int maxWeight)
+Neuron::Neuron(int minWeight, int maxWeight)
 {
-	if (prevLayerSize > 0)
-	{
-		this->weights = new vector<double>(prevLayerSize);
-		initializeWeights(minWeight, maxWeight);
-	}
-	else
-	{
-		this->weights = nullptr;
-	}
+	/*this->weights = new vector<double>(prevLayerSize);
+	initializeWeights(minWeight, maxWeight);*/
+	//}
 	this->inputValue = 0;
 	this->activationValue = 0;
 }
@@ -25,28 +19,18 @@ Neuron::~Neuron()
 
 void Neuron::computeInput(vector<Neuron> *previousLayerNeurons)
 {
-	if (this->weights)
+	for (unsigned int i = 0; i < previousLayerNeurons->size(); i++)
 	{
-		for (unsigned int i = 0; i < previousLayerNeurons->size(); i++)
-		{
-			this->inputValue += (*this->weights)[i] * (*previousLayerNeurons)[i].activationValue;
-		}
+		this->inputValue += (*this->weights)[i] * (*previousLayerNeurons)[i].activationValue;
 	}
 }
 
 void Neuron::computeActivationValue(double lambda)
 {
-	if (this->weights)
-	{
-		this->activationValue = 1 / (1 + exp(-lambda * this->inputValue));
-	}
-	else
-	{
-		this->activationValue = this->inputValue;
-	}
+	this->activationValue = 1 / (1 + exp(-lambda * this->inputValue));
 }
 
-void Neuron::initializeWeights(int minWeight, int maxWeight)
+void Neuron::initializeWeights(unsigned int n, int minWeight, int maxWeight)
 {
 	srand(time(nullptr));
 	const int weightRange = maxWeight - minWeight;
@@ -57,7 +41,20 @@ void Neuron::initializeWeights(int minWeight, int maxWeight)
 	
 }
 
+void Neuron::setExpectedOutput(double expectedOutput)
+{
+	this->expectedOutput = expectedOutput;
+}
+
 void Neuron::setInputValue(double inputValue)
 {
 	this->inputValue = inputValue;
+	this->activationValue = inputValue;
 }
+
+
+void Neuron::setWeightsSize(unsigned int n)
+{
+	this->weights = new vector<double>(n);
+}
+
