@@ -30,6 +30,7 @@ void Neuron::computeError()
 
 void Neuron::computeInput(vector<Neuron> *previousLayerNeurons)
 {
+	this->inputValue = 0;
 	for (unsigned int i = 0; i < previousLayerNeurons->size(); i++)
 	{
 		this->inputValue += (*this->weights)[i] * (*previousLayerNeurons)[i].activationValue;
@@ -100,11 +101,11 @@ void Neuron::setWeightsSize(unsigned int n)
 }
 
 
-void Neuron::updateWeights(vector<Neuron>* prevLayerNeurons, double learningRate)
+void Neuron::updateWeights(vector<Neuron>* prevLayerNeurons, double learningRate, double momentum)
 {
 	for (unsigned int i = 0; i < this->weights->size(); i++)
 	{
-		double deltaWeight = learningRate * this->localGradient * (*prevLayerNeurons)[i].activationValue;
+		double deltaWeight = learningRate * this->localGradient * (*prevLayerNeurons)[i].activationValue + momentum * (*this->weightsDelta)[i];
 		(*this->weights)[i] += deltaWeight;
 		(*this->weightsDelta)[i] = deltaWeight;
 	}
