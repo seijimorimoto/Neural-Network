@@ -19,7 +19,7 @@ public:
 	void setInputValue(double inputValue);
 	void setWeights(vector<double> *weights); // used for testing purposes.
 	void setWeightsSize(unsigned int n);
-	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate);
+	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate, double momentum);
 	double getWeight(unsigned int prevLayerNeuronIndex);
 	double activationValue;
 	double error;

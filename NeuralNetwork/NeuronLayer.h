@@ -19,7 +19,7 @@ public:
 	void printLocalGradients(); // used for testing purposes.
 	void printWeights(); // used for testing purposes.
 	void setWeight(vector<double> *weights, int neuronIndex); // used for testing purposes.
-	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate);
+	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate, double momentum);
 	int size();
 	double lambda;
 	int minWeight;

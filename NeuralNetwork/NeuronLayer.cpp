@@ -118,11 +118,11 @@ void NeuronLayer::setWeight(vector<double>* weights, int neuronIndex)
 }
 
 
-void NeuronLayer::updateWeights(vector<Neuron>* prevLayerNeurons, double learningRate)
+void NeuronLayer::updateWeights(vector<Neuron>* prevLayerNeurons, double learningRate, double momentum)
 {
 	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
-		(*this->neurons)[i].updateWeights(prevLayerNeurons, learningRate);
+		(*this->neurons)[i].updateWeights(prevLayerNeurons, learningRate, momentum);
 	}
 }
 
