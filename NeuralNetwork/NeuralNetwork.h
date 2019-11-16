@@ -12,6 +12,9 @@ public:
 	void backPropagation();
 	void feedForward();
 	void initializeWeights();
+	void printActivationValues(); // used for testing purposes.
+	void printLocalGradients(); // used for testing purposes.
+	void printWeights(); // used for testing purposes.
 	void train(int epochs);
 	vector<NeuronLayer> layers;
 	double learningRate;
