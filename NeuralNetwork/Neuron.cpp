@@ -1,6 +1,6 @@
 #include <cmath>
 #include <cstdlib>
-#include <ctime>
+#include <iostream>
 #include "Neuron.h"
 
 
@@ -56,13 +56,20 @@ void Neuron::computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeuron
 
 void Neuron::initializeWeights(unsigned int n, int minWeight, int maxWeight)
 {
-	srand(time(nullptr));
 	const int weightRange = maxWeight - minWeight;
 	for (unsigned int i = 0; i < this->weights->size(); i++)
 	{
 		(*this->weights)[i] = minWeight + static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / weightRange));
 	}
 	
+}
+
+void Neuron::printWeights(unsigned int neuronIndex)
+{
+	for (unsigned int i = 0; i < this->weights->size(); i++)
+	{
+		cout << "  W(" << neuronIndex << "," << i << "): " << (*this->weights)[i] << endl;
+	}
 }
 
 
@@ -79,9 +86,17 @@ void Neuron::setInputValue(double inputValue)
 }
 
 
+void Neuron::setWeights(vector<double>* weights)
+{
+	this->weights = weights;
+	this->weightsDelta = new vector<double>(weights->size(), 0);
+}
+
+
 void Neuron::setWeightsSize(unsigned int n)
 {
 	this->weights = new vector<double>(n);
+	this->weightsDelta = new vector<double>(n, 0);
 }
 
 
@@ -89,7 +104,9 @@ void Neuron::updateWeights(vector<Neuron>* prevLayerNeurons, double learningRate
 {
 	for (unsigned int i = 0; i < this->weights->size(); i++)
 	{
-		(*this->weights)[i] = learningRate * this->localGradient * (*prevLayerNeurons)[i].activationValue;
+		double deltaWeight = learningRate * this->localGradient * (*prevLayerNeurons)[i].activationValue;
+		(*this->weights)[i] += deltaWeight;
+		(*this->weightsDelta)[i] = deltaWeight;
 	}
 }
 

@@ -1,3 +1,5 @@
+#include <ctime>
+#include <iostream>
 #include "NeuralNetwork.h"
 
 
@@ -44,11 +46,45 @@ void NeuralNetwork::feedForward()
 
 void NeuralNetwork::initializeWeights()
 {
+	srand(time(nullptr));
 	for (unsigned int i = 1; i < this->layers.size(); i++)
 	{
 		const unsigned int n = this->layers[i - 1].size();
 		this->layers[i].initializeWeights(n);
 	}
+}
+
+void NeuralNetwork::printActivationValues()
+{
+	for (unsigned int i = 0; i < this->layers.size(); i++)
+	{
+		cout << "NEURON LAYER " << i << endl;
+		this->layers[i].printActivationValues();
+		cout << endl;
+	}
+	cout << endl;
+}
+
+void NeuralNetwork::printLocalGradients()
+{
+	for (unsigned int i = 1; i < this->layers.size(); i++)
+	{
+		cout << "NEURON LAYER " << i << endl;
+		this->layers[i].printLocalGradients();
+		cout << endl;
+	}
+	cout << endl;
+}
+
+void NeuralNetwork::printWeights()
+{
+	for (unsigned int i = 1; i < this->layers.size(); i++)
+	{
+		cout << "NEURON LAYER " << i << endl;
+		this->layers[i].printWeights();
+		cout << endl;
+	}
+	cout << endl;
 }
 
 void NeuralNetwork::train(int epochs)

@@ -15,6 +15,10 @@ public:
 	void computeLocalGradients();
 	void computeLocalGradients(vector<Neuron> *nextLayerNeurons);
 	void initializeWeights(unsigned int numberOfPrevLayerNeurons);
+	void printActivationValues(); // used for testing purposes.
+	void printLocalGradients(); // used for testing purposes.
+	void printWeights(); // used for testing purposes.
+	void setWeight(vector<double> *weights, int neuronIndex); // used for testing purposes.
 	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate);
 	int size();
 	double lambda;

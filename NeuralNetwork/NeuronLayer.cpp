@@ -1,3 +1,4 @@
+#include <iostream>
 #include "NeuronLayer.h"
 
 
@@ -79,12 +80,43 @@ void NeuronLayer::computeLocalGradients(vector<Neuron>* nextLayerNeurons)
 
 void NeuronLayer::initializeWeights(unsigned int numberOfPrevLayerNeurons)
 {
-	for (unsigned int i = 0; i < numberOfPrevLayerNeurons; i++)
+	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
 		(*this->neurons)[i].setWeightsSize(numberOfPrevLayerNeurons);
 		(*this->neurons)[i].initializeWeights(numberOfPrevLayerNeurons, minWeight, maxWeight);
 	}
 }
+
+void NeuronLayer::printActivationValues()
+{
+	for (unsigned int i = 0; i < this->neurons->size(); i++)
+	{
+		cout << (*neurons)[i].activationValue << endl;
+	}
+}
+
+void NeuronLayer::printLocalGradients()
+{
+	for (unsigned int i = 0; i < this->neurons->size(); i++)
+	{
+		cout << (*neurons)[i].localGradient << endl;
+	}
+}
+
+void NeuronLayer::printWeights()
+{
+	for (unsigned int i = 0; i < this->neurons->size(); i++)
+	{
+		(*this->neurons)[i].printWeights(i);
+	}
+}
+
+
+void NeuronLayer::setWeight(vector<double>* weights, int neuronIndex)
+{
+	(*this->neurons)[neuronIndex].setWeights(weights);
+}
+
 
 void NeuronLayer::updateWeights(vector<Neuron>* prevLayerNeurons, double learningRate)
 {
