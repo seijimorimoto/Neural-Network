@@ -16,6 +16,7 @@ public:
 	void computeLocalGradients();
 	void computeLocalGradients(vector<Neuron> *nextLayerNeurons);
 	double getNeuronError(unsigned int neuronIndex);
+	vector<double> getActivationValues();
 	vector<vector<double>> getWeights();
 	void initializeWeights(unsigned int numberOfPrevLayerNeurons);
 	void printActivationValues(); // used for testing purposes.

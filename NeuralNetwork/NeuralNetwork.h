@@ -12,14 +12,18 @@ public:
 	~NeuralNetwork();
 	void accumulateStepErrors(vector<double> &accumErrors);
 	void backPropagation();
+	void denormalizeOutputs(vector<double> &outputs);
 	void exportModel(string filePath);
 	void feedForward();
 	static NeuralNetwork importModel(string filePath);
 	void initializeWeights();
 	double getEpochError(vector<double> &stepErrors, unsigned int trainSize);
 	vector<double> getInputsFromDataRecord(vector<double> &dataRecord);
+	vector<double> getNetworkOutputs();
 	vector<double> getOutputsFromDataRecord(vector<double> &dataRecord);
 	void normalizeDataSet();
+	void normalizeInputs(vector<double> &inputs);
+	vector<double> predict(vector<double> &inputs);
 	void printActivationValues(); // used for testing purposes.
 	void printDataSet(); // used for testing purposes.
 	void printLocalGradients(); // used for testing purposes.

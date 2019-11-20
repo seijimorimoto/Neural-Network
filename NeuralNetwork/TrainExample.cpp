@@ -9,7 +9,7 @@ namespace TrainExample
 {
 	int main()
 	{
-		const unsigned int EPOCHS = 10;
+		const unsigned int EPOCHS = 5000;
 		const double LAMBDA = 0.2;
 		const double LEARNING_RATE = 0.6;
 		const double MIN_INPUT = 0;
@@ -27,7 +27,7 @@ namespace TrainExample
 
 		vector<NeuronLayer> layers;
 		layers.push_back(NeuronLayer(2, LAMBDA));
-		layers.push_back(NeuronLayer(4, LAMBDA));
+		layers.push_back(NeuronLayer(6, LAMBDA));
 		layers.push_back(NeuronLayer(2, LAMBDA));
 
 		NeuralNetwork network(layers, LEARNING_RATE, MOMENTUM);

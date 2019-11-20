@@ -50,6 +50,14 @@ void NeuralNetwork::backPropagation()
 	}
 }
 
+void NeuralNetwork::denormalizeOutputs(vector<double> &outputs)
+{
+	for (unsigned int i = 0; i < outputs.size(); i++)
+	{
+		outputs[i] = outputs[i] * (this->maxOutput - this->minOutput) + this->minOutput;
+	}
+}
+
 void NeuralNetwork::exportModel(string filePath)
 {
 	ofstream file;
@@ -226,6 +234,11 @@ vector<double> NeuralNetwork::getInputsFromDataRecord(vector<double> &dataRecord
 	return inputs;
 }
 
+vector<double> NeuralNetwork::getNetworkOutputs()
+{
+	return this->layers[this->layers.size() - 1].getActivationValues();
+}
+
 vector<double> NeuralNetwork::getOutputsFromDataRecord(vector<double> &dataRecord)
 {
 	vector<double> outputs;
@@ -250,6 +263,24 @@ void NeuralNetwork::normalizeDataSet()
 			this->dataSet[i][j] = (this->dataSet[i][j] - this->minOutput) / (this->maxOutput - this->minOutput);
 		}
 	}
+}
+
+void NeuralNetwork::normalizeInputs(vector<double>& inputs)
+{
+	for (unsigned int i = 0; i < inputs.size(); i++)
+	{
+		inputs[i] = (inputs[i] - this->minInput) / (this->maxInput - this->minInput);
+	}
+}
+
+vector<double> NeuralNetwork::predict(vector<double> &inputs)
+{
+	normalizeInputs(inputs);
+	setValuesToInputLayer(inputs);
+	feedForward();
+	auto outputs = getNetworkOutputs();
+	denormalizeOutputs(outputs);
+	return outputs;
 }
 
 void NeuralNetwork::printActivationValues()
