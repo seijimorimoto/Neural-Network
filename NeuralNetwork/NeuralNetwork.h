@@ -14,6 +14,7 @@ public:
 	void backPropagation();
 	void exportModel(string filePath);
 	void feedForward();
+	static NeuralNetwork importModel(string filePath);
 	void initializeWeights();
 	double getEpochError(vector<double> &stepErrors, unsigned int trainSize);
 	vector<double> getInputsFromDataRecord(vector<double> &dataRecord);

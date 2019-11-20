@@ -57,13 +57,14 @@ void NeuralNetwork::exportModel(string filePath)
 
 	if (file.is_open())
 	{
+		file << "LAYERS\n";
 		for (unsigned int i = 0; i < this->layers.size(); i++)
 		{
 			auto neurons = this->layers[i].size();
 			auto lambda = this->layers[i].lambda;
 			auto minWeight = this->layers[i].minWeight;
 			auto maxWeight = this->layers[i].maxWeight;
-			file << "LAYER," << neurons << "," << lambda << "," << minWeight << "," << maxWeight << "\n";
+			file << neurons << "," << lambda << "," << minWeight << "," << maxWeight << "\n";
 		}
 		file << "\n";
 		
@@ -73,11 +74,10 @@ void NeuralNetwork::exportModel(string filePath)
 			auto neuronsWeights = this->layers[i].getWeights();
 			for (unsigned int j = 0; j < neuronsWeights.size(); j++)
 			{
+				file << i << "," << j;
 				for (unsigned int k = 0; k < neuronsWeights[j].size(); k++)
 				{
-					file << neuronsWeights[j][k];
-					if (k < neuronsWeights[j].size() - 1)
-						file << ",";
+					file << "," << neuronsWeights[j][k];
 				}
 				file << "\n";
 			}
@@ -103,6 +103,94 @@ void NeuralNetwork::feedForward()
 		vector<Neuron> *prevLayerNeurons = this->layers[i - 1].neurons;
 		this->layers[i].computeInputs(prevLayerNeurons);
 		this->layers[i].computeActivationValues();
+	}
+}
+
+NeuralNetwork NeuralNetwork::importModel(string filePath)
+{
+	ifstream file;
+	file.open(filePath);
+
+	if (file.is_open())
+	{
+		double learningRate, minInput, minOutput, maxInput, maxOutput, momentum;
+		vector<NeuronLayer> layers;
+		string line;
+		unsigned int phase = 0;
+		
+		while (getline(file, line))
+		{
+			if (line == "LAYERS")
+			{
+				phase = 0;
+				continue;
+			}
+			else if (line == "WEIGHTS")
+			{
+				phase = 1;
+				continue;
+			}
+			else if (line == "PARAMS")
+			{
+				phase = 2;
+				continue;
+			}
+			else if (line == "")
+				continue;
+
+			stringstream ss(line);
+			switch (phase)
+			{
+				case 0:
+				{
+					string neurons, lambda, minWeight, maxWeight;
+					getline(ss, neurons, ',');
+					getline(ss, lambda, ',');
+					getline(ss, minWeight, ',');
+					getline(ss, maxWeight, ',');
+					// TODO: Change type of minWeight and maxWeight to double.
+					layers.push_back(NeuronLayer(stoi(neurons), stod(lambda), stod(minWeight), stod(maxWeight)));
+					break;
+				}
+				case 1:
+				{
+					string layer, neuron, weight;
+					vector<double> *neuronWeights = new vector<double>();
+					getline(ss, layer, ',');
+					getline(ss, neuron, ',');
+					while (getline(ss, weight, ','))
+					{
+						neuronWeights->push_back(stod(weight));
+					}
+					layers[stoi(layer)].setWeight(neuronWeights, stoi(neuron));
+					break;
+				}
+				case 2:
+				{
+					string paramLabel, paramValue;
+					getline(ss, paramLabel, ',');
+					getline(ss, paramValue, ',');
+					if (paramLabel == "LEARNING_RATE")
+						learningRate = stod(paramValue);
+					else if (paramLabel == "MIN_INPUT")
+						minInput = stod(paramValue);
+					else if (paramLabel == "MIN_OUTPUT")
+						minOutput = stod(paramValue);
+					else if (paramLabel == "MAX_INPUT")
+						maxInput = stod(paramValue);
+					else if (paramLabel == "MAX_OUTPUT")
+						maxOutput = stod(paramValue);
+					else if (paramLabel == "MOMENTUM")
+						momentum = stod(paramValue);
+					break;
+				}
+			}
+		}
+
+		file.close();
+		NeuralNetwork network(layers, learningRate, momentum);
+		network.setNormalizationValues(minInput, maxInput, minOutput, maxOutput);
+		return network;
 	}
 }
 
