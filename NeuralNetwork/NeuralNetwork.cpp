@@ -1,6 +1,10 @@
+#include <algorithm>
+#include <cstdlib>
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <cmath>
+#include <random>
 #include <string>
 #include <sstream>
 #include "NeuralNetwork.h"
@@ -16,6 +20,16 @@ NeuralNetwork::NeuralNetwork(vector<NeuronLayer> &layers, double learningRate, d
 
 NeuralNetwork::~NeuralNetwork()
 {
+}
+
+
+void NeuralNetwork::accumulateStepErrors(vector<double>& accumErrors)
+{
+	for (unsigned int i = 0; i < accumErrors.size(); i++)
+	{
+		auto neuronError = this->layers[this->layers.size() - 1].getNeuronError(i);
+		accumErrors[i] += neuronError * neuronError;
+	}
 }
 
 
@@ -50,11 +64,58 @@ void NeuralNetwork::feedForward()
 
 void NeuralNetwork::initializeWeights()
 {
-	srand(time(nullptr));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	for (unsigned int i = 1; i < this->layers.size(); i++)
 	{
 		const unsigned int n = this->layers[i - 1].size();
 		this->layers[i].initializeWeights(n);
+	}
+}
+
+double NeuralNetwork::getEpochError(vector<double> &stepErrors, unsigned int trainSize)
+{
+	double epochError = 0;
+	for (unsigned int i = 0; i < stepErrors.size(); i++)
+	{
+		epochError += sqrt(stepErrors[i] / trainSize);
+	}
+	epochError /= stepErrors.size();
+	return epochError;
+}
+
+vector<double> NeuralNetwork::getInputsFromDataRecord(vector<double> &dataRecord)
+{
+	vector<double> inputs;
+	for (unsigned int i = 0; i < this->inputFeatures; i++)
+	{
+		inputs.push_back(dataRecord[i]);
+	}
+	return inputs;
+}
+
+vector<double> NeuralNetwork::getOutputsFromDataRecord(vector<double> &dataRecord)
+{
+	vector<double> outputs;
+	for (unsigned int i = this->inputFeatures; i < this->inputFeatures + this->outputFeatures; i++)
+	{
+		outputs.push_back(dataRecord[i]);
+	}
+	return outputs;
+}
+
+void NeuralNetwork::normalizeDataSet(double inputMin, double inputMax, double outputMin, double outputMax)
+{
+	for (unsigned int i = 0; i < this->dataSet.size(); i++)
+	{
+		for (unsigned int j = 0; j < this->inputFeatures; j++)
+		{
+			this->dataSet[i][j] = (this->dataSet[i][j] - inputMin) / (inputMax - inputMin);
+		}
+
+		for (unsigned int j = this->inputFeatures; j < this->inputFeatures + this->outputFeatures; j++)
+		{
+			this->dataSet[i][j] = (this->dataSet[i][j] - outputMin) / (outputMax - outputMin);
+		}
 	}
 }
 
@@ -71,19 +132,20 @@ void NeuralNetwork::printActivationValues()
 
 void NeuralNetwork::printDataSet()
 {
-	for (unsigned int i = 0; i < this->inputData.size(); i++)
+	for (unsigned int i = 0; i < this->dataSet.size(); i++)
 	{
-		for (unsigned int j = 0; j < this->inputData[i].size(); j++)
+		for (unsigned int j = 0; j < this->inputFeatures; j++)
 		{
-			cout << this->inputData[i][j] << " ";
+			cout << this->dataSet[i][j] << " ";
 		}
 		cout << " | ";
-		for (unsigned int j = 0; j < this->outputData[i].size(); j++)
+		for (unsigned int j = this->inputFeatures; j < this->inputFeatures + this->outputFeatures; j++)
 		{
-			cout << " " << this->outputData[i][j];
+			cout << " " << this->dataSet[i][j];
 		}
 		cout << endl;
 	}
+	cout << endl;
 }
 
 void NeuralNetwork::printLocalGradients()
@@ -108,10 +170,14 @@ void NeuralNetwork::printWeights()
 	cout << endl;
 }
 
-void NeuralNetwork::setCsvDataFile(string csvFilePath, unsigned int inputColumns, unsigned int outputColumns, unsigned int startRow)
+void NeuralNetwork::setCsvDataFile(string csvFilePath, unsigned int inputColumns, unsigned int outputColumns, unsigned int startRow, double trainPerc, double validationPerc)
 {
 	ifstream file;
 	file.open(csvFilePath);
+	this->inputFeatures = inputColumns;
+	this->outputFeatures = outputColumns;
+	this->trainPercentage = trainPerc;
+	this->validationPercentage = validationPerc;
 
 	if (file.is_open())
 	{
@@ -125,33 +191,58 @@ void NeuralNetwork::setCsvDataFile(string csvFilePath, unsigned int inputColumns
 		{
 			stringstream ss(line);
 			string valueStr;
-			vector<double> inputRecord, outputRecord;
-
-			for (unsigned int i = 0; i < inputColumns; i++)
+			vector<double> dataRecord;
+			for (unsigned int i = 0; i < inputColumns + outputColumns; i++)
 			{
 				getline(ss, valueStr, ',');
-				inputRecord.push_back(stod(valueStr));
+				dataRecord.push_back(stod(valueStr));
 			}
-
-			for (unsigned int i = inputColumns; i < inputColumns + outputColumns; i++)
-			{
-				getline(ss, valueStr, ',');
-				outputRecord.push_back(stod(valueStr));
-			}
-
-			this->inputData.push_back(inputRecord);
-			this->outputData.push_back(outputRecord);
+			this->dataSet.push_back(dataRecord);
 		}
 
 		file.close();
 	}
 }
 
-void NeuralNetwork::train(int epochs)
+void NeuralNetwork::setValuesToInputLayer(vector<double> &inputValues)
 {
+	this->layers[0].setInputValues(inputValues);
+}
+
+void NeuralNetwork::setValuesToOutputLayer(vector<double> &outputValues)
+{
+	this->layers[this->layers.size() - 1].setOutputValues(outputValues);
+}
+
+void NeuralNetwork::shuffleDataSet()
+{
+	shuffle(this->dataSet.begin(), this->dataSet.end(), default_random_engine(11));
+}
+
+void NeuralNetwork::train(unsigned int epochs)
+{
+	vector<unsigned int> trainIndices;
+	unsigned int maxTrainIndex = static_cast<unsigned int>(this->dataSet.size() * this->trainPercentage);
+	for (unsigned int i = 0; i < maxTrainIndex; i++)
+	{
+		trainIndices.push_back(i);
+	}
+
+	const unsigned int outputLayerSize = this->layers[this->layers.size() - 1].size();
 	for (unsigned int i = 0; i < epochs; i++)
 	{
-		feedForward();
-		backPropagation();
+		vector<double> accumErrors(outputLayerSize, 0);
+		for (unsigned int j = 0; j < trainIndices.size(); j++)
+		{
+			unsigned int trainIndex = trainIndices[j];
+			setValuesToInputLayer(getInputsFromDataRecord(this->dataSet[trainIndex]));
+			setValuesToOutputLayer(getOutputsFromDataRecord(this->dataSet[trainIndex]));
+			feedForward();
+			backPropagation();
+			accumulateStepErrors(accumErrors);
+		}
+		cout << "Epoch " << i << ": " << getEpochError(accumErrors, trainIndices.size()) << endl;
+		shuffle(trainIndices.begin(), trainIndices.end(), default_random_engine(NULL));
 	}
+	cout << endl;
 }

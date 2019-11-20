@@ -6,7 +6,7 @@ using namespace std;
 class Neuron
 {
 public:
-	Neuron(int minWeight, int maxWeight);
+	Neuron();
 	~Neuron();
 	void computeActivationValue(double lambda);
 	void computeError();
