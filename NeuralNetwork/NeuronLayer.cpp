@@ -2,29 +2,30 @@
 #include "NeuronLayer.h"
 
 
+NeuronLayer::NeuronLayer(int n, double lambda, int minWeight, int maxWeight)
+{
+	this->neurons = new vector<Neuron>(n, Neuron());
+	this->lambda = lambda;
+	this->minWeight = minWeight;
+	this->maxWeight = maxWeight;
+}
+
 NeuronLayer::NeuronLayer(int n, double lambda, vector<double> *inputs, vector<double> *outputs, int minWeight, int maxWeight)
 {
-	this->neurons = new vector<Neuron>(n, Neuron(minWeight, maxWeight));
+	this->neurons = new vector<Neuron>(n, Neuron());
+	this->lambda = lambda;
+	this->minWeight = minWeight;
+	this->maxWeight = maxWeight;
 
 	if (inputs)
 	{
-		for (unsigned int i = 0; i < inputs->size(); i++)
-		{
-			(*this->neurons)[i].setInputValue((*inputs)[i]);
-		}
+		setInputValues(*inputs);
 	}
 
 	if (outputs)
 	{
-		for (unsigned int i = 0; i < outputs->size(); i++)
-		{
-			(*this->neurons)[i].expectedOutput = (*outputs)[i];
-		}
+		setOutputValues(*outputs);
 	}
-	
-	this->lambda = lambda;
-	this->minWeight = minWeight;
-	this->maxWeight = maxWeight;
 }
 
 
@@ -77,6 +78,11 @@ void NeuronLayer::computeLocalGradients(vector<Neuron>* nextLayerNeurons)
 	}
 }
 
+double NeuronLayer::getNeuronError(unsigned int neuronIndex)
+{
+	return (*this->neurons)[neuronIndex].error;
+}
+
 
 void NeuronLayer::initializeWeights(unsigned int numberOfPrevLayerNeurons)
 {
@@ -108,6 +114,22 @@ void NeuronLayer::printWeights()
 	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
 		(*this->neurons)[i].printWeights(i);
+	}
+}
+
+void NeuronLayer::setInputValues(vector<double> &inputValues)
+{
+	for (unsigned int i = 0; i < inputValues.size(); i++)
+	{
+		(*this->neurons)[i].setInputValue(inputValues[i]);
+	}
+}
+
+void NeuronLayer::setOutputValues(vector<double> &outputValues)
+{
+	for (unsigned int i = 0; i < outputValues.size(); i++)
+	{
+		(*this->neurons)[i].setExpectedOutput(outputValues[i]);
 	}
 }
 

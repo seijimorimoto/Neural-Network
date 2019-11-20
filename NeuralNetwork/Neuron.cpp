@@ -1,10 +1,9 @@
 #include <cmath>
-#include <cstdlib>
 #include <iostream>
 #include "Neuron.h"
 
 
-Neuron::Neuron(int minWeight, int maxWeight)
+Neuron::Neuron()
 {
 	this->inputValue = 0;
 	this->activationValue = 0;
