@@ -83,6 +83,16 @@ double NeuronLayer::getNeuronError(unsigned int neuronIndex)
 	return (*this->neurons)[neuronIndex].error;
 }
 
+vector<vector<double>> NeuronLayer::getWeights()
+{
+	vector<vector<double>> neuronsWeights;
+	for (unsigned int i = 0; i < this->neurons->size(); i++)
+	{
+		neuronsWeights.push_back((*this->neurons)[i].getWeights());
+	}
+	return neuronsWeights;
+}
+
 
 void NeuronLayer::initializeWeights(unsigned int numberOfPrevLayerNeurons)
 {

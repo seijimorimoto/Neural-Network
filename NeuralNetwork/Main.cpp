@@ -7,8 +7,7 @@ using namespace std;
 
 int main()
 {
-	const unsigned int EPOCHS = 5;
-	const string FILE_PATH = "..\\RobotDataFiltered.csv";
+	const unsigned int EPOCHS = 10;
 	const double LAMBDA = 0.2;
 	const double LEARNING_RATE = 0.6;
 	const double MIN_INPUT = 0;
@@ -18,8 +17,10 @@ int main()
 	const double MOMENTUM = 0.1;
 	const unsigned int NUM_INPUTS = 2;
 	const unsigned int NUM_OUTPUTS = 2;
+	const string OUT_FILE = "..\\ExportedModel.txt";
 	const unsigned int START_ROW = 1;
 	const double TRAIN = 1;
+	const string TRAIN_FILE = "..\\RobotDataFiltered.csv";
 	const double VALIDATE = 0;
 	
 	vector<NeuronLayer> layers;
@@ -29,8 +30,9 @@ int main()
 	
 	NeuralNetwork network(layers, LEARNING_RATE, MOMENTUM);
 	network.initializeWeights();
-	network.setCsvDataFile(FILE_PATH, NUM_INPUTS, NUM_OUTPUTS, START_ROW, TRAIN, VALIDATE);
+	network.setCsvDataFile(TRAIN_FILE, NUM_INPUTS, NUM_OUTPUTS, START_ROW, TRAIN, VALIDATE);
 	network.shuffleDataSet();
+	network.setNormalizationValues(MIN_INPUT, MAX_INPUT, MIN_OUTPUT, MAX_OUTPUT);
 
 	/*
 	cout << "-----------------DATA SET----------------" << endl;
@@ -38,7 +40,7 @@ int main()
 	*/
 
 	//cout << "-----------NORMALIZED DATA SET-----------" << endl;
-	network.normalizeDataSet(MIN_INPUT, MAX_INPUT, MIN_OUTPUT, MAX_OUTPUT);
+	network.normalizeDataSet();
 	//network.printDataSet();
 	
 	cout << "-----------------ERRORS------------------" << endl;
@@ -51,9 +53,11 @@ int main()
 	cout << "-------------LOCAL GRADIENTS-------------" << endl;
 	network.printLocalGradients();
 
+	*/
 	cout << "------------WEIGHTS UPDATED--------------" << endl;
 	network.printWeights();
-	*/
+
+	network.exportModel(OUT_FILE);
 
 	cin.get();
 	return 0;

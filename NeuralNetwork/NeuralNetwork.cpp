@@ -50,6 +50,51 @@ void NeuralNetwork::backPropagation()
 	}
 }
 
+void NeuralNetwork::exportModel(string filePath)
+{
+	ofstream file;
+	file.open(filePath);
+
+	if (file.is_open())
+	{
+		for (unsigned int i = 0; i < this->layers.size(); i++)
+		{
+			auto neurons = this->layers[i].size();
+			auto lambda = this->layers[i].lambda;
+			auto minWeight = this->layers[i].minWeight;
+			auto maxWeight = this->layers[i].maxWeight;
+			file << "LAYER," << neurons << "," << lambda << "," << minWeight << "," << maxWeight << "\n";
+		}
+		file << "\n";
+		
+		file << "WEIGHTS\n";
+		for (unsigned int i = 1; i < this->layers.size(); i++)
+		{
+			auto neuronsWeights = this->layers[i].getWeights();
+			for (unsigned int j = 0; j < neuronsWeights.size(); j++)
+			{
+				for (unsigned int k = 0; k < neuronsWeights[j].size(); k++)
+				{
+					file << neuronsWeights[j][k];
+					if (k < neuronsWeights[j].size() - 1)
+						file << ",";
+				}
+				file << "\n";
+			}
+		}
+		file << "\n";
+
+		file << "PARAMS\n";
+		file << "LEARNING_RATE," << this->learningRate << "\n";
+		file << "MIN_INPUT," << this->minInput << "\n";
+		file << "MIN_OUTPUT," << this->minOutput << "\n";
+		file << "MAX_INPUT," << this->maxInput << "\n";
+		file << "MAX_OUTPUT," << this->maxOutput << "\n";
+		file << "MOMENTUM," << this->momentum << "\n";
+		file.close();
+	}
+}
+
 
 void NeuralNetwork::feedForward()
 {
@@ -103,18 +148,18 @@ vector<double> NeuralNetwork::getOutputsFromDataRecord(vector<double> &dataRecor
 	return outputs;
 }
 
-void NeuralNetwork::normalizeDataSet(double inputMin, double inputMax, double outputMin, double outputMax)
+void NeuralNetwork::normalizeDataSet()
 {
 	for (unsigned int i = 0; i < this->dataSet.size(); i++)
 	{
 		for (unsigned int j = 0; j < this->inputFeatures; j++)
 		{
-			this->dataSet[i][j] = (this->dataSet[i][j] - inputMin) / (inputMax - inputMin);
+			this->dataSet[i][j] = (this->dataSet[i][j] - this->minInput) / (this->maxInput - this->minInput);
 		}
 
 		for (unsigned int j = this->inputFeatures; j < this->inputFeatures + this->outputFeatures; j++)
 		{
-			this->dataSet[i][j] = (this->dataSet[i][j] - outputMin) / (outputMax - outputMin);
+			this->dataSet[i][j] = (this->dataSet[i][j] - this->minOutput) / (this->maxOutput - this->minOutput);
 		}
 	}
 }
@@ -202,6 +247,14 @@ void NeuralNetwork::setCsvDataFile(string csvFilePath, unsigned int inputColumns
 
 		file.close();
 	}
+}
+
+void NeuralNetwork::setNormalizationValues(double inputMin, double inputMax, double outputMin, double outputMax)
+{
+	this->minInput = inputMin;
+	this->minOutput = outputMin;
+	this->maxInput = inputMax;
+	this->maxOutput = outputMax;
 }
 
 void NeuralNetwork::setValuesToInputLayer(vector<double> &inputValues)

@@ -53,6 +53,11 @@ void Neuron::computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeuron
 	this->localGradient = lambda * this->activationValue * (1 - this->activationValue) * gradientWeightSum;
 }
 
+vector<double> Neuron::getWeights()
+{
+	return *this->weights;
+}
+
 
 void Neuron::initializeWeights(unsigned int n, int minWeight, int maxWeight)
 {
