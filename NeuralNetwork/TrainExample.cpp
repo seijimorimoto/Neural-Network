@@ -10,13 +10,13 @@ namespace TrainExample
 	int main()
 	{
 		const unsigned int EPOCHS = 5000;
-		const double LAMBDA = 0.2;
+		const double LAMBDA = 0.7;
 		const double LEARNING_RATE = 0.6;
 		const double MIN_INPUT = 0;
 		const double MIN_OUTPUT = 0;
 		const double MAX_INPUT = 5000;
 		const double MAX_OUTPUT = 300;
-		const double MOMENTUM = 0.1;
+		const double MOMENTUM = 0.2;
 		const unsigned int NUM_INPUTS = 2;
 		const unsigned int NUM_OUTPUTS = 2;
 		const string OUT_FILE = "..\\ExportedModel.txt";

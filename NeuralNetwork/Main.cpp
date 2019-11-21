@@ -1,5 +1,4 @@
 #include "Examples.h"
-#include <iostream>
 #include <string>
 
 using namespace std;
@@ -16,5 +15,10 @@ int main(int argc, char * argv[])
 	if (argc == 2 && argument == "ImportModelExample")
 	{
 		return ImportModelExample::main();
+	}
+
+	if (argc == 2 && argument == "RobotExample")
+	{
+		return RobotExample::main(argc, argv);
 	}
 }
