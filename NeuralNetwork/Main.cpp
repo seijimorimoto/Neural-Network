@@ -5,19 +5,30 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
+	// Default case is the RobotExample.
 	if (argc == 1)
+	{
+		return RobotExample::main(argc, argv);
+	}
+	
+	string argument = argv[1];
+
+	if (argument == "TrainExample")
 	{
 		return TrainExample::main();
 	}
 
-	string argument = argv[1];
-	
-	if (argc == 2 && argument == "ImportModelExample")
+	if (argument == "MultipleTrainersExample")
+	{
+		return MultipleTrainersExample::main();
+	}
+
+	if (argument == "ImportModelExample")
 	{
 		return ImportModelExample::main();
 	}
 
-	if (argc == 2 && argument == "RobotExample")
+	if (argument == "RobotExample")
 	{
 		return RobotExample::main(argc, argv);
 	}

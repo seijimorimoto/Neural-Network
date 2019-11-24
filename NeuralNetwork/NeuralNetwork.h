@@ -33,7 +33,8 @@ public:
 	void setValuesToInputLayer(vector<double> &inputValues);
 	void setValuesToOutputLayer(vector<double> &outputValues);
 	void shuffleDataSet();
-	void train(unsigned int epochs);
+	void train(unsigned int epochs, bool printEpochErrors=false);
+	double validate();
 	vector<vector<double>> dataSet;
 	unsigned int inputFeatures;
 	vector<NeuronLayer> layers;

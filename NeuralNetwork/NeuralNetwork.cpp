@@ -391,7 +391,7 @@ void NeuralNetwork::shuffleDataSet()
 	shuffle(this->dataSet.begin(), this->dataSet.end(), default_random_engine(11));
 }
 
-void NeuralNetwork::train(unsigned int epochs)
+void NeuralNetwork::train(unsigned int epochs, bool printEpochErrors)
 {
 	vector<unsigned int> trainIndices;
 	unsigned int maxTrainIndex = static_cast<unsigned int>(this->dataSet.size() * this->trainPercentage);
@@ -411,10 +411,39 @@ void NeuralNetwork::train(unsigned int epochs)
 			setValuesToOutputLayer(getOutputsFromDataRecord(this->dataSet[trainIndex]));
 			feedForward();
 			backPropagation();
-			accumulateStepErrors(accumErrors);
+			if (printEpochErrors)
+			{
+				accumulateStepErrors(accumErrors);
+			}
 		}
-		cout << "Epoch " << i << ": " << getEpochError(accumErrors, trainIndices.size()) << endl;
+		if (printEpochErrors)
+		{
+			cout << "Epoch " << i << ": " << getEpochError(accumErrors, trainIndices.size()) << endl;
+		}
 		shuffle(trainIndices.begin(), trainIndices.end(), default_random_engine(NULL));
 	}
-	cout << endl;
+	
+	if (printEpochErrors)
+	{ 
+		cout << endl;
+	}
+}
+
+double NeuralNetwork::validate()
+{
+	unsigned int startValidationIndex = static_cast<unsigned int>(this->dataSet.size() * this->trainPercentage);
+	unsigned int endValidationIndex = static_cast<unsigned int>(this->dataSet.size() * (this->trainPercentage + this->validationPercentage));
+	const unsigned int outputLayerSize = this->layers[this->layers.size() - 1].size();
+	vector<double> neuronErrors(outputLayerSize, 0);
+
+	for (unsigned int i = startValidationIndex; i < endValidationIndex; i++)
+	{
+		setValuesToInputLayer(getInputsFromDataRecord(this->dataSet[i]));
+		setValuesToOutputLayer(getOutputsFromDataRecord(this->dataSet[i]));
+		feedForward();
+		this->layers[this->layers.size() - 1].computeErrors();
+		accumulateStepErrors(neuronErrors);
+	}
+
+	return getEpochError(neuronErrors, endValidationIndex - startValidationIndex);
 }
