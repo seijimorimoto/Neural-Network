@@ -31,6 +31,7 @@ NeuronLayer::NeuronLayer(int n, double lambda, vector<double> *inputs, vector<do
 
 NeuronLayer::~NeuronLayer()
 {
+	delete this->neurons;
 }
 
 

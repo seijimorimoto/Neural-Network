@@ -18,9 +18,7 @@ NeuralNetwork::NeuralNetwork(vector<NeuronLayer> &layers, double learningRate, d
 }
 
 
-NeuralNetwork::~NeuralNetwork()
-{
-}
+NeuralNetwork::~NeuralNetwork() = default;
 
 
 void NeuralNetwork::accumulateStepErrors(vector<double>& accumErrors)
