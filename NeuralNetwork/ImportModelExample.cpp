@@ -1,5 +1,5 @@
-#include "NeuralNetwork.h"
 #include <iostream>
+#include "NeuralNetwork.h"
 
 using namespace std;
 

@@ -1,6 +1,6 @@
+#include <iostream>
 #include "aria.h"
 #include "NeuralNetwork.h"
-#include <iostream>
 
 using namespace std;
 
@@ -29,7 +29,7 @@ namespace RobotExample {
 		ArSensorReading *sonarSensors[8];
 		while (true)
 		{
-			double frontDistance = 0;
+			double frontDistance = 10000;
 			double leftDistance = 10000;
 			for (unsigned int i = 0; i < 8; i++)
 			{
@@ -44,9 +44,9 @@ namespace RobotExample {
 
 			for (unsigned int i = 3; i < 5; i++)
 			{
-				frontDistance += sonarSensors[i]->getRange();
+				if (sonarSensors[i]->getRange() < frontDistance)
+					frontDistance = sonarSensors[i]->getRange();
 			}
-			frontDistance /= 2;
 			
 			auto outputs = network.predict(vector<double>{ leftDistance, frontDistance });
 			for (unsigned int i = 0; i < outputs.size(); i++)

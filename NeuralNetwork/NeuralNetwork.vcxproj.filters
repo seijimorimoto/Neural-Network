@@ -53,5 +53,8 @@
     <ClCompile Include="RobotExample.cpp">
       <Filter>Source Files\Examples</Filter>
     </ClCompile>
+    <ClCompile Include="MultipleTrainersExample.cpp">
+      <Filter>Source Files\Examples</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
