@@ -12,6 +12,8 @@ Neuron::Neuron()
 
 Neuron::~Neuron()
 {
+	delete this->weights;
+	delete this->weightsDelta;
 }
 
 
