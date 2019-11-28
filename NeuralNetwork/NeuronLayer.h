@@ -8,7 +8,6 @@ class NeuronLayer
 {
 public:
 	NeuronLayer(int n, int biasN, double lambda, int minWeight = 0, int maxWeight = 1);
-	NeuronLayer(int n, double lambda, vector<double> *inputs, vector<double> *outputs, int minWeight = 0, int maxWeight = 1); // used for testing purposes (when passing input or output values directly).
 	~NeuronLayer();
 	void computeActivationValues();
 	void computeErrors();
@@ -24,9 +23,10 @@ public:
 	void printWeights(); // used for testing purposes.
 	void setInputValues(vector<double> &inputValues);
 	void setOutputValues(vector<double> &outputValues);
-	void setWeight(vector<double> *weights, int neuronIndex); // used for testing purposes.
+	void setWeight(vector<double> *weights, int neuronIndex);
 	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate, double momentum);
 	int size();
+
 	int biasN;
 	double lambda;
 	int minWeight;
