@@ -13,15 +13,16 @@ public:
 	void computeInput(vector<Neuron> *previousLayerNeurons);
 	void computeLocalGradient(double lambda);
 	void computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeurons, int nextLayerBiasN, unsigned int neuronIndex);
+	double getWeight(unsigned int prevLayerNeuronIndex);
 	vector<double> getWeights();
-	void initializeWeights(unsigned int n, int minWeight, int maxWeight);
+	void initializeWeights(int minWeight, int maxWeight);
 	void printWeights(unsigned int neuronIndex); // used for testing purposes.
 	void setExpectedOutput(double expectedOutput);
 	void setInputValue(double inputValue);
-	void setWeights(vector<double> *weights); // used for testing purposes.
+	void setWeights(vector<double> *weights);
 	void setWeightsSize(unsigned int n);
 	void updateWeights(vector<Neuron> *prevLayerNeurons, double learningRate, double momentum);
-	double getWeight(unsigned int prevLayerNeuronIndex);
+	
 	double activationValue;
 	double error;
 	double expectedOutput;

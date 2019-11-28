@@ -123,7 +123,7 @@ void NeuronLayer::initializeWeights(unsigned int numberOfPrevLayerNeurons)
 	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
 		(*this->neurons)[i].setWeightsSize(numberOfPrevLayerNeurons);
-		(*this->neurons)[i].initializeWeights(numberOfPrevLayerNeurons, minWeight, maxWeight);
+		(*this->neurons)[i].initializeWeights(minWeight, maxWeight);
 	}
 }
 
