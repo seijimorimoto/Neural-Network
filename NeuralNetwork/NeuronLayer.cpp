@@ -2,9 +2,10 @@
 #include "NeuronLayer.h"
 
 
-NeuronLayer::NeuronLayer(int n, double lambda, int minWeight, int maxWeight)
+NeuronLayer::NeuronLayer(int n, int biasN, double lambda, int minWeight, int maxWeight)
 {
-	this->neurons = new vector<Neuron>(n, Neuron());
+	this->neurons = new vector<Neuron>(n + biasN, Neuron());
+	this->biasN = biasN;
 	this->lambda = lambda;
 	this->minWeight = minWeight;
 	this->maxWeight = maxWeight;
@@ -31,13 +32,13 @@ NeuronLayer::NeuronLayer(int n, double lambda, vector<double> *inputs, vector<do
 
 NeuronLayer::~NeuronLayer()
 {
-	delete this->neurons;
+	/*delete this->neurons;*/
 }
 
 
 void NeuronLayer::computeActivationValues()
 {
-	for (unsigned int i = 0; i < this->neurons->size(); i++)
+	for (unsigned int i = 0; i < this->neurons->size() - this->biasN; i++)
 	{
 		(*this->neurons)[i].computeActivationValue(lambda);
 	}
@@ -55,9 +56,15 @@ void NeuronLayer::computeErrors()
 
 void NeuronLayer::computeInputs(vector<Neuron> *prevLayerNeurons)
 {
-	for (unsigned int i = 0; i < this->neurons->size(); i++)
+	for (unsigned int i = 0; i < this->neurons->size() - this->biasN; i++)
 	{
 		(*this->neurons)[i].computeInput(prevLayerNeurons);
+	}
+
+	// Setting up the bias input and activation values.
+	for (unsigned int i = this->neurons->size(); i < this->neurons->size(); i++)
+	{
+		(*this->neurons)[i].setInputValue(1);
 	}
 }
 
@@ -71,11 +78,11 @@ void NeuronLayer::computeLocalGradients()
 }
 
 
-void NeuronLayer::computeLocalGradients(vector<Neuron>* nextLayerNeurons)
+void NeuronLayer::computeLocalGradients(vector<Neuron>* nextLayerNeurons, int nextLayerBiasN)
 {
 	for (unsigned int i = 0; i < this->neurons->size(); i++)
 	{
-		(*this->neurons)[i].computeLocalGradient(this->lambda, nextLayerNeurons, i);
+		(*this->neurons)[i].computeLocalGradient(this->lambda, nextLayerNeurons, nextLayerBiasN, i);
 	}
 }
 
@@ -143,6 +150,12 @@ void NeuronLayer::setInputValues(vector<double> &inputValues)
 	for (unsigned int i = 0; i < inputValues.size(); i++)
 	{
 		(*this->neurons)[i].setInputValue(inputValues[i]);
+	}
+
+	// Setting up the biases.
+	for (unsigned int i = inputValues.size(); i < this->neurons->size(); i++)
+	{
+		(*this->neurons)[i].setInputValue(1);
 	}
 }
 

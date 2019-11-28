@@ -12,8 +12,8 @@ Neuron::Neuron()
 
 Neuron::~Neuron()
 {
-	delete this->weights;
-	delete this->weightsDelta;
+	/*delete this->weights;
+	delete this->weightsDelta;*/
 }
 
 
@@ -45,10 +45,10 @@ void Neuron::computeLocalGradient(double lambda)
 }
 
 
-void Neuron::computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeurons, unsigned int neuronIndex)
+void Neuron::computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeurons, int nextLayerBiasN, unsigned int neuronIndex)
 {
 	double gradientWeightSum = 0;
-	for (unsigned int i = 0; i < nextLayerNeurons->size(); i++)
+	for (unsigned int i = 0; i < nextLayerNeurons->size() - nextLayerBiasN; i++)
 	{
 		gradientWeightSum += (*nextLayerNeurons)[i].localGradient * (*nextLayerNeurons)[i].getWeight(neuronIndex);
 	}

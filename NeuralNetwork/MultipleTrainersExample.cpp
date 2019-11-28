@@ -57,9 +57,9 @@ namespace MultipleTrainersExample
 							+ parse(momentum) + "_" + parse(learningRate);
 						
 						vector<NeuronLayer> layers;
-						layers.push_back(NeuronLayer(2, lambda));
-						layers.push_back(NeuronLayer(hiddenNeurons, lambda));
-						layers.push_back(NeuronLayer(2, lambda));
+						layers.push_back(NeuronLayer(2, 1, lambda));
+						layers.push_back(NeuronLayer(hiddenNeurons, 1, lambda));
+						layers.push_back(NeuronLayer(2, 0, lambda));
 						
 						NeuralNetwork network(layers, learningRate, momentum);
 						network.initializeWeights();
