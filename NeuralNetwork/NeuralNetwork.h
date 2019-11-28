@@ -21,6 +21,7 @@ public:
 	vector<double> getInputsFromDataRecord(vector<double> &dataRecord);
 	vector<double> getNetworkOutputs();
 	vector<double> getOutputsFromDataRecord(vector<double> &dataRecord);
+	vector<unsigned int> getTrainIndices();
 	void normalizeDataSet();
 	void normalizeInputs(vector<double> &inputs);
 	vector<double> predict(vector<double> &inputs);
@@ -37,6 +38,7 @@ public:
 	void train(unsigned int epochs, double minDelta, unsigned int patience, bool printEpochErrors=false);
 	void trainEpoch(vector<unsigned int> &trainIndices, vector<double> &accumErrors);
 	double validate();
+	
 	vector<vector<double>> dataSet;
 	unsigned int inputFeatures;
 	vector<NeuronLayer> layers;
