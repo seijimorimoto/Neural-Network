@@ -12,7 +12,7 @@ public:
 	void computeError();
 	void computeInput(vector<Neuron> *previousLayerNeurons);
 	void computeLocalGradient(double lambda);
-	void computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeurons, unsigned int neuronIndex);
+	void computeLocalGradient(double lambda, vector<Neuron> *nextLayerNeurons, int nextLayerBiasN, unsigned int neuronIndex);
 	vector<double> getWeights();
 	void initializeWeights(unsigned int n, int minWeight, int maxWeight);
 	void printWeights(unsigned int neuronIndex); // used for testing purposes.

@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
+#include <limits>
 #include <iostream>
 #include <cmath>
 #include <random>
@@ -39,7 +40,8 @@ void NeuralNetwork::backPropagation()
 	for (i = i - 1; i > 0; i--)
 	{
 		vector<Neuron> *neurons = this->layers[i + 1].neurons;
-		this->layers[i].computeLocalGradients(neurons);
+		int biasNextLayer = this->layers[i + 1].biasN;
+		this->layers[i].computeLocalGradients(neurons, biasNextLayer);
 	}
 	for (i = 1; i < this->layers.size(); i++)
 	{
@@ -66,11 +68,12 @@ void NeuralNetwork::exportModel(string filePath)
 		file << "LAYERS\n";
 		for (unsigned int i = 0; i < this->layers.size(); i++)
 		{
-			auto neurons = this->layers[i].size();
+			auto neurons = this->layers[i].size() - this->layers[i].biasN;
+			auto biasN = this->layers[i].biasN;
 			auto lambda = this->layers[i].lambda;
 			auto minWeight = this->layers[i].minWeight;
 			auto maxWeight = this->layers[i].maxWeight;
-			file << neurons << "," << lambda << "," << minWeight << "," << maxWeight << "\n";
+			file << neurons << "," << biasN << "," << lambda << "," << minWeight << "," << maxWeight << "\n";
 		}
 		file << "\n";
 		
@@ -149,13 +152,14 @@ NeuralNetwork NeuralNetwork::importModel(string filePath)
 			{
 				case 0:
 				{
-					string neurons, lambda, minWeight, maxWeight;
+					string neurons, biasN, lambda, minWeight, maxWeight;
 					getline(ss, neurons, ',');
+					getline(ss, biasN, ',');
 					getline(ss, lambda, ',');
 					getline(ss, minWeight, ',');
 					getline(ss, maxWeight, ',');
 					// TODO: Change type of minWeight and maxWeight to double.
-					layers.push_back(NeuronLayer(stoi(neurons), stod(lambda), stod(minWeight), stod(maxWeight)));
+					layers.push_back(NeuronLayer(stoi(neurons), stoi(biasN), stod(lambda), stod(minWeight), stod(maxWeight)));
 					break;
 				}
 				case 1:
@@ -402,21 +406,51 @@ void NeuralNetwork::train(unsigned int epochs, bool printEpochErrors)
 	for (unsigned int i = 0; i < epochs; i++)
 	{
 		vector<double> accumErrors(outputLayerSize, 0);
-		for (unsigned int j = 0; j < trainIndices.size(); j++)
-		{
-			unsigned int trainIndex = trainIndices[j];
-			setValuesToInputLayer(getInputsFromDataRecord(this->dataSet[trainIndex]));
-			setValuesToOutputLayer(getOutputsFromDataRecord(this->dataSet[trainIndex]));
-			feedForward();
-			backPropagation();
-			if (printEpochErrors)
-			{
-				accumulateStepErrors(accumErrors);
-			}
-		}
+		trainEpoch(trainIndices, accumErrors);
+
 		if (printEpochErrors)
 		{
-			cout << "Epoch " << i << ": " << getEpochError(accumErrors, trainIndices.size()) << endl;
+			cout << "EPOCH " << i << ": " << endl;
+			cout << "  Train: " << getEpochError(accumErrors, trainIndices.size()) << endl;
+		}
+	}
+
+}
+
+void NeuralNetwork::train(unsigned int epochs, double minDelta, unsigned int patience, bool printEpochErrors)
+{
+	vector<unsigned int> trainIndices;
+	unsigned int maxTrainIndex = static_cast<unsigned int>(this->dataSet.size() * this->trainPercentage);
+	for (unsigned int i = 0; i < maxTrainIndex; i++)
+	{
+		trainIndices.push_back(i);
+	}
+
+	const unsigned int outputLayerSize = this->layers[this->layers.size() - 1].size();
+	double minValidError = numeric_limits<double>::max();
+	unsigned int epochsWithoutImprovement = 0;
+	for (unsigned int i = 0; i < epochs && epochsWithoutImprovement <= patience; i++)
+	{
+		vector<double> accumErrors(outputLayerSize, 0);
+		trainEpoch(trainIndices, accumErrors);
+		const double trainError = getEpochError(accumErrors, trainIndices.size());
+		const double validError = validate();
+		
+		if (minValidError - validError >= minDelta)
+		{
+			epochsWithoutImprovement = 0;
+		}
+		else
+		{
+			epochsWithoutImprovement++;
+		}
+		minValidError = min(minValidError, validError);
+		
+		if (printEpochErrors)
+		{
+			cout << "EPOCH " << i << ": " << endl;
+			cout << "  Train: " << trainError << endl;
+			cout << "  Validation: " << validError << endl;
 		}
 		shuffle(trainIndices.begin(), trainIndices.end(), default_random_engine(NULL));
 	}
@@ -424,6 +458,19 @@ void NeuralNetwork::train(unsigned int epochs, bool printEpochErrors)
 	if (printEpochErrors)
 	{ 
 		cout << endl;
+	}
+}
+
+void NeuralNetwork::trainEpoch(vector<unsigned int> &trainIndices, vector<double>& accumErrors)
+{
+	for (unsigned int i = 0; i < trainIndices.size(); i++)
+	{
+		unsigned int trainIndex = trainIndices[i];
+		setValuesToInputLayer(getInputsFromDataRecord(this->dataSet[trainIndex]));
+		setValuesToOutputLayer(getOutputsFromDataRecord(this->dataSet[trainIndex]));
+		feedForward();
+		backPropagation();
+		accumulateStepErrors(accumErrors);
 	}
 }
 

@@ -33,7 +33,9 @@ public:
 	void setValuesToInputLayer(vector<double> &inputValues);
 	void setValuesToOutputLayer(vector<double> &outputValues);
 	void shuffleDataSet();
-	void train(unsigned int epochs, bool printEpochErrors=false);
+	void train(unsigned int epochs, bool printEpochErrors = false);
+	void train(unsigned int epochs, double minDelta, unsigned int patience, bool printEpochErrors=false);
+	void trainEpoch(vector<unsigned int> &trainIndices, vector<double> &accumErrors);
 	double validate();
 	vector<vector<double>> dataSet;
 	unsigned int inputFeatures;
