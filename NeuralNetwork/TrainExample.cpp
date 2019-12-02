@@ -9,9 +9,9 @@ namespace TrainExample
 {
 	int main()
 	{
-		const unsigned int EPOCHS = 10000;
+		const unsigned int EPOCHS = 334; // 5000
 		const double LAMBDA = 0.8;
-		const double LEARNING_RATE = 0.8;
+		const double LEARNING_RATE = 0.4;
 		const double MIN_DELTA_ERROR = 0.0001;
 		const double MIN_INPUT = 0;
 		const double MIN_OUTPUT = 0;
@@ -21,15 +21,15 @@ namespace TrainExample
 		const unsigned int NUM_INPUTS = 2;
 		const unsigned int NUM_OUTPUTS = 2;
 		const string OUT_FILE = "ExportedModel.txt";
-		const unsigned int PATIENCE = 10;
+		//const unsigned int PATIENCE = 15; // 20
 		const unsigned int START_ROW = 1;
-		const double TRAIN = 0.7;
+		const double TRAIN = 1; // 0.7
 		const string TRAIN_FILE = "RobotDataFiltered.csv";
-		const double VALIDATE = 0.3;
+		const double VALIDATE = 0; // 0.3
 
 		vector<NeuronLayer> layers;
 		layers.push_back(NeuronLayer(2, 1, LAMBDA));
-		layers.push_back(NeuronLayer(10, 1, LAMBDA));
+		layers.push_back(NeuronLayer(6, 1, LAMBDA));
 		layers.push_back(NeuronLayer(2, 0, LAMBDA));
 
 		NeuralNetwork network(layers, LEARNING_RATE, MOMENTUM);
@@ -48,7 +48,8 @@ namespace TrainExample
 		//network.printDataSet();
 
 		cout << "-----------------ERRORS------------------" << endl;
-		network.train(EPOCHS, MIN_DELTA_ERROR, PATIENCE, true);
+		network.train(EPOCHS, true);
+		//network.train(EPOCHS, MIN_DELTA_ERROR, PATIENCE, true);
 
 		/*
 		cout << "------------ACTIVATION VALUES------------" << endl;
