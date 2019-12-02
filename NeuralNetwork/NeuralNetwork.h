@@ -15,6 +15,7 @@ public:
 	void denormalizeOutputs(vector<double> &outputs);
 	void exportModel(string filePath);
 	void feedForward();
+	vector<vector<double>> getDataSet();
 	static NeuralNetwork importModel(string filePath);
 	void initializeWeights();
 	double getEpochError(vector<double> &stepErrors, unsigned int trainSize);

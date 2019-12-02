@@ -150,6 +150,12 @@ void NeuralNetwork::feedForward()
 	}
 }
 
+// Returns the dataset that was loaded into the neural network.
+vector<vector<double>> NeuralNetwork::getDataSet()
+{
+	return this->dataSet;
+}
+
 // Imports a neural network model from a file.
 // Params:
 // - filePath: The path to the model.
