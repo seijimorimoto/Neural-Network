@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -30,6 +31,7 @@ namespace MultipleTrainersExample
 		const unsigned int NUM_OUTPUTS = 2;
 		const string BASE_OUT_FILE = "ExportedModels/ExportedModel";
 		const unsigned int START_ROW = 1;
+		const string SUMMARY_FILE = "SummaryModel.csv";
 		const double TRAIN = 0.7;
 		const string TRAIN_FILE = "RobotDataFiltered.csv";
 		const double VALIDATE = 0.3;
@@ -40,6 +42,8 @@ namespace MultipleTrainersExample
 		const vector<double> LEARNING_RATES{ 0.2, 0.4, 0.6, 0.8 };
 		
 		map<string, double> modelToErrorMapping;
+		ofstream summaryFile;
+		summaryFile.open(SUMMARY_FILE);
 
 		for (unsigned int i = 0; i < HIDDEN_NEURONS.size(); i++)
 		{
@@ -72,11 +76,13 @@ namespace MultipleTrainersExample
 						modelToErrorMapping[modelName] = network.validate();
 						network.exportModel(BASE_OUT_FILE + "_" + modelName + ".txt");
 						cout << modelName << ": " << modelToErrorMapping[modelName] << endl;
+						summaryFile << modelName << "," << modelToErrorMapping[modelName] << "\n";
 					}
 				}
 			}
 		}
 		cout << endl;
+		summaryFile.close();
 
 		double minErrorValue = numeric_limits<double>::max();
 		string minErrorModel = "";

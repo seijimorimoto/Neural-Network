@@ -1,0 +1,296 @@
+-----------------ERRORS------------------
+EPOCH 0:
+  Train: 0.0984013
+  Validation: 0.0934038
+EPOCH 1:
+  Train: 0.0769193
+  Validation: 0.0631959
+EPOCH 2:
+  Train: 0.0597733
+  Validation: 0.0534007
+EPOCH 3:
+  Train: 0.0540533
+  Validation: 0.0588633
+EPOCH 4:
+  Train: 0.0528647
+  Validation: 0.0502583
+EPOCH 5:
+  Train: 0.0521492
+  Validation: 0.0497746
+EPOCH 6:
+  Train: 0.0517824
+  Validation: 0.0503088
+EPOCH 7:
+  Train: 0.0509763
+  Validation: 0.0493441
+EPOCH 8:
+  Train: 0.0502613
+  Validation: 0.0491473
+EPOCH 9:
+  Train: 0.0499538
+  Validation: 0.0494775
+EPOCH 10:
+  Train: 0.0493795
+  Validation: 0.0512315
+EPOCH 11:
+  Train: 0.048911
+  Validation: 0.0489416
+EPOCH 12:
+  Train: 0.0482975
+  Validation: 0.0468334
+EPOCH 13:
+  Train: 0.047609
+  Validation: 0.0460482
+EPOCH 14:
+  Train: 0.0470788
+  Validation: 0.0447009
+EPOCH 15:
+  Train: 0.0460244
+  Validation: 0.0476801
+EPOCH 16:
+  Train: 0.0450845
+  Validation: 0.0448144
+EPOCH 17:
+  Train: 0.0443085
+  Validation: 0.0431969
+EPOCH 18:
+  Train: 0.0432933
+  Validation: 0.0425851
+EPOCH 19:
+  Train: 0.0425678
+  Validation: 0.04115
+EPOCH 20:
+  Train: 0.0419771
+  Validation: 0.0414828
+EPOCH 21:
+  Train: 0.0414635
+  Validation: 0.0391815
+EPOCH 22:
+  Train: 0.041045
+  Validation: 0.0393889
+EPOCH 23:
+  Train: 0.0409012
+  Validation: 0.0414011
+EPOCH 24:
+  Train: 0.0405624
+  Validation: 0.0444789
+EPOCH 25:
+  Train: 0.0403592
+  Validation: 0.0381197
+EPOCH 26:
+  Train: 0.039952
+  Validation: 0.0387181
+EPOCH 27:
+  Train: 0.0399367
+  Validation: 0.039385
+EPOCH 28:
+  Train: 0.0396094
+  Validation: 0.0388216
+EPOCH 29:
+  Train: 0.0391281
+  Validation: 0.0386076
+EPOCH 30:
+  Train: 0.0391218
+  Validation: 0.0369203
+EPOCH 31:
+  Train: 0.0388094
+  Validation: 0.0365077
+EPOCH 32:
+  Train: 0.0384773
+  Validation: 0.0377314
+EPOCH 33:
+  Train: 0.0384479
+  Validation: 0.040787
+EPOCH 34:
+  Train: 0.0380696
+  Validation: 0.038373
+EPOCH 35:
+  Train: 0.0379285
+  Validation: 0.0354692
+EPOCH 36:
+  Train: 0.0377033
+  Validation: 0.0370154
+EPOCH 37:
+  Train: 0.0377481
+  Validation: 0.0367654
+EPOCH 38:
+  Train: 0.0371672
+  Validation: 0.0350727
+EPOCH 39:
+  Train: 0.0371485
+  Validation: 0.0353795
+EPOCH 40:
+  Train: 0.0369227
+  Validation: 0.0343806
+EPOCH 41:
+  Train: 0.0366707
+  Validation: 0.0393537
+EPOCH 42:
+  Train: 0.0365144
+  Validation: 0.0341849
+EPOCH 43:
+  Train: 0.0364181
+  Validation: 0.0341351
+EPOCH 44:
+  Train: 0.0362989
+  Validation: 0.0343543
+EPOCH 45:
+  Train: 0.0363848
+  Validation: 0.0351198
+EPOCH 46:
+  Train: 0.0358724
+  Validation: 0.0348822
+EPOCH 47:
+  Train: 0.0358766
+  Validation: 0.0336816
+EPOCH 48:
+  Train: 0.0356755
+  Validation: 0.0348799
+EPOCH 49:
+  Train: 0.0357665
+  Validation: 0.0355476
+EPOCH 50:
+  Train: 0.0356131
+  Validation: 0.0341787
+EPOCH 51:
+  Train: 0.035441
+  Validation: 0.0336431
+EPOCH 52:
+  Train: 0.0355949
+  Validation: 0.0340361
+EPOCH 53:
+  Train: 0.0354045
+  Validation: 0.0338642
+EPOCH 54:
+  Train: 0.0351329
+  Validation: 0.0329432
+EPOCH 55:
+  Train: 0.0355081
+  Validation: 0.0341672
+EPOCH 56:
+  Train: 0.035256
+  Validation: 0.0332118
+EPOCH 57:
+  Train: 0.0351623
+  Validation: 0.0356363
+EPOCH 58:
+  Train: 0.0352014
+  Validation: 0.0339426
+EPOCH 59:
+  Train: 0.035175
+  Validation: 0.0368944
+EPOCH 60:
+  Train: 0.0350792
+  Validation: 0.0328476
+EPOCH 61:
+  Train: 0.0349254
+  Validation: 0.0326183
+EPOCH 62:
+  Train: 0.0350296
+  Validation: 0.032682
+EPOCH 63:
+  Train: 0.0349521
+  Validation: 0.0363881
+EPOCH 64:
+  Train: 0.0349821
+  Validation: 0.0325847
+EPOCH 65:
+  Train: 0.0347877
+  Validation: 0.0324235
+EPOCH 66:
+  Train: 0.0348985
+  Validation: 0.0327793
+EPOCH 67:
+  Train: 0.0346536
+  Validation: 0.0347361
+EPOCH 68:
+  Train: 0.0346477
+  Validation: 0.0329377
+EPOCH 69:
+  Train: 0.0347653
+  Validation: 0.0321601
+EPOCH 70:
+  Train: 0.0348499
+  Validation: 0.0338023
+EPOCH 71:
+  Train: 0.0346417
+  Validation: 0.0346926
+EPOCH 72:
+  Train: 0.034483
+  Validation: 0.0372151
+EPOCH 73:
+  Train: 0.0345679
+  Validation: 0.0327083
+EPOCH 74:
+  Train: 0.034631
+  Validation: 0.0318584
+EPOCH 75:
+  Train: 0.0345871
+  Validation: 0.0330377
+EPOCH 76:
+  Train: 0.0347587
+  Validation: 0.0333653
+EPOCH 77:
+  Train: 0.0346845
+  Validation: 0.0325387
+EPOCH 78:
+  Train: 0.0345606
+  Validation: 0.0320492
+EPOCH 79:
+  Train: 0.0344497
+  Validation: 0.0356026
+EPOCH 80:
+  Train: 0.0346487
+  Validation: 0.0317438
+EPOCH 81:
+  Train: 0.0345878
+  Validation: 0.0316315
+EPOCH 82:
+  Train: 0.0345092
+  Validation: 0.0332283
+EPOCH 83:
+  Train: 0.034394
+  Validation: 0.0315862
+EPOCH 84:
+  Train: 0.0343971
+  Validation: 0.0338967
+EPOCH 85:
+  Train: 0.034458
+  Validation: 0.0317467
+EPOCH 86:
+  Train: 0.0343741
+  Validation: 0.0333029
+EPOCH 87:
+  Train: 0.0342946
+  Validation: 0.0317784
+EPOCH 88:
+  Train: 0.0343407
+  Validation: 0.0320487
+EPOCH 89:
+  Train: 0.0342421
+  Validation: 0.0327407
+EPOCH 90:
+  Train: 0.0340929
+  Validation: 0.0343247
+EPOCH 91:
+  Train: 0.0342116
+  Validation: 0.0331511
+EPOCH 92:
+  Train: 0.034146
+  Validation: 0.0333917
+EPOCH 93:
+  Train: 0.0341609
+  Validation: 0.0341766
+EPOCH 94:
+  Train: 0.0342646
+  Validation: 0.0323891
+EPOCH 95:
+  Train: 0.0341612
+  Validation: 0.0319497
+EPOCH 96:
+  Train: 0.0340129
+  Validation: 0.0371619
+EPOCH 97:
+  Train: 0.0340681
+  Validation: 0.0326372
+
